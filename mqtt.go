@@ -68,6 +68,7 @@ func (handler *MqttHandler) Run() {
 
 	// schedule announce message to be published periodically
 	ticker := time.NewTicker(handler.announceTimeout)
+	defer ticker.Stop()
 
 	// subscribe to request topic
 	client.Subscribe(handler.rqTopic, 2, func(cl mqtt.Client, msg mqtt.Message) {
