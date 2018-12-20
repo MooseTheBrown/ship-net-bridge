@@ -66,17 +66,8 @@ func (handler *MqttHandler) Run() {
 
 	defer client.Disconnect(uint(handler.disconnectTimeout.Nanoseconds() / 1000000))
 
-	// signal that the ship is able to communicate by sending shipid through announce topic
-	// and wait until the message is delivered
-	// NOTE: announce message should be retained by broker so that any control software starting
-	// AFTER this announce will get it
-	pubToken := client.Publish(handler.announceTopic, 2, true, handler.shipid)
-	if pubToken.WaitTimeout(handler.announceTimeout) == false {
-		panic("MqttHandler failed to announce")
-	}
-	if err := pubToken.Error(); err != nil {
-		panic(err)
-	}
+	// schedule announce message to be published periodically
+	ticker := time.NewTicker(handler.announceTimeout)
 
 	// subscribe to request topic
 	client.Subscribe(handler.rqTopic, 2, func(cl mqtt.Client, msg mqtt.Message) {
@@ -85,11 +76,18 @@ func (handler *MqttHandler) Run() {
 	})
 
 	// send responses using response topic
+mqtt_loop:
 	for {
-		resp := <-handler.in
-		if resp == MQTT_INTERRUPT_CMD {
-			break
+		select {
+		case resp := <-handler.in:
+			// send response to the broker
+			if resp == MQTT_INTERRUPT_CMD {
+				break mqtt_loop
+			}
+			client.Publish(handler.respTopic, 2, false, resp)
+		case <-ticker.C:
+			// time to announce
+			client.Publish(handler.announceTopic, 2, false, handler.shipid)
 		}
-		client.Publish(handler.respTopic, 2, false, resp)
 	}
 }
