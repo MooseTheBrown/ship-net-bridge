@@ -49,6 +49,7 @@ func NewMqttHandler(in chan string, out chan string, broker string, cTimeout tim
 func (handler *MqttHandler) Run() {
 	// setup MQTT client and connect to broker
 	opts := mqtt.NewClientOptions().AddBroker(handler.broker).SetCleanSession(true)
+	opts.SetAutoReconnect(true)
 	tlsConfig := &tls.Config{
 		InsecureSkipVerify: !handler.certCheck,
 	}
