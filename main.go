@@ -43,7 +43,7 @@ func main() {
 		log.Println("main shutting down")
 		e := recover()
 		if e != nil {
-			log.Printf("Panic caught in main: %s, exiting\n")
+			log.Printf("Panic caught in main: %s, exiting\n", e)
 		}
 
 		// send interrupt commands to the handlers
