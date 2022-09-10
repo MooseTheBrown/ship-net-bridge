@@ -33,9 +33,9 @@ func main() {
 	mqttin := make(chan string, 10)
 	mqttout := make(chan string, 10)
 	mqttHandler := NewMqttHandler(mqttin, mqttout, config.MqttBroker,
-		time.Duration(config.ConnTimeout)*time.Millisecond, config.ShipId, config.AnnounceTopic,
-		time.Duration(config.AnnounceTimeout)*time.Millisecond, time.Duration(config.DisconnectTimeout)*time.Millisecond,
-		config.BrokerCertCheck)
+		time.Duration(config.ConnTimeout)*time.Millisecond, config.BrokerUsername, config.BrokerPassword,
+		config.ShipId, config.AnnounceTopic, time.Duration(config.AnnounceTimeout)*time.Millisecond,
+		time.Duration(config.DisconnectTimeout)*time.Millisecond, config.BrokerCertCheck)
 	go runHandler(mqttHandler)
 
 	// set graceful exit procedure

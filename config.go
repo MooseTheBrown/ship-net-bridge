@@ -11,6 +11,8 @@ type Config struct {
 	UnixSocket      string
 	MqttBroker      string
 	BrokerCertCheck bool
+	BrokerUsername  string
+	BrokerPassword  string
 	ShipId          string
 	AnnounceTopic   string
 	// times are in milliseconds

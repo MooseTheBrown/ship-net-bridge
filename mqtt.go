@@ -17,6 +17,8 @@ type MqttHandler struct {
 	out               chan string
 	broker            string
 	connTimeout       time.Duration
+	username          string
+	password          string
 	shipid            string
 	announceTopic     string
 	announceTimeout   time.Duration
@@ -27,14 +29,16 @@ type MqttHandler struct {
 }
 
 func NewMqttHandler(in chan string, out chan string, broker string, cTimeout time.Duration,
-	shipid string, announce string, aTimeout time.Duration, dTimeout time.Duration,
-	certCheck bool) *MqttHandler {
+	username string, password string, shipid string, announce string,
+	aTimeout time.Duration, dTimeout time.Duration, certCheck bool) *MqttHandler {
 
 	return &MqttHandler{
 		in:                in,
 		out:               out,
 		broker:            broker,
 		connTimeout:       cTimeout,
+		username:          username,
+		password:          password,
 		shipid:            shipid,
 		announceTopic:     announce,
 		announceTimeout:   aTimeout,
@@ -50,6 +54,9 @@ func (handler *MqttHandler) Run() {
 	// setup MQTT client and connect to broker
 	opts := mqtt.NewClientOptions().AddBroker(handler.broker).SetCleanSession(true)
 	opts.SetAutoReconnect(true)
+	opts.SetCredentialsProvider(func() (username string, password string) {
+		return handler.username, handler.password
+	})
 	tlsConfig := &tls.Config{
 		InsecureSkipVerify: !handler.certCheck,
 	}
