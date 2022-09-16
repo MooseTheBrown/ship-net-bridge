@@ -57,6 +57,7 @@ func (handler *MqttHandler) Run() {
 	opts.SetCredentialsProvider(func() (username string, password string) {
 		return handler.username, handler.password
 	})
+	opts.SetClientID(handler.shipid)
 	tlsConfig := &tls.Config{
 		InsecureSkipVerify: !handler.certCheck,
 	}
