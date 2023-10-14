@@ -62,6 +62,13 @@ func (handler *MqttHandler) Run() {
 		InsecureSkipVerify: !handler.certCheck,
 	}
 	opts.SetTLSConfig(tlsConfig)
+	opts.SetOnConnectHandler(func(cl mqtt.Client) {
+		// subscribe to request topic
+		cl.Subscribe(handler.rqTopic, 2, func(cl mqtt.Client, msg mqtt.Message) {
+			rq := bytes.NewBuffer(msg.Payload()).String()
+			handler.out <- rq
+		})
+	})
 
 	client := mqtt.NewClient(opts)
 	token := client.Connect()
@@ -79,13 +86,6 @@ func (handler *MqttHandler) Run() {
 	ticker := time.NewTicker(handler.announceTimeout)
 	defer ticker.Stop()
 
-	// subscribe to request topic
-	client.Subscribe(handler.rqTopic, 2, func(cl mqtt.Client, msg mqtt.Message) {
-		rq := bytes.NewBuffer(msg.Payload()).String()
-		handler.out <- rq
-	})
-
-	// send responses using response topic
 mqtt_loop:
 	for {
 		select {
