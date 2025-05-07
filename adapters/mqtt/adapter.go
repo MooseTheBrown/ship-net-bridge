@@ -58,14 +58,14 @@ func NewAdapter(broker string, connTimeout time.Duration, username string,
 	}
 }
 
-func (a *Adapter) Run() {
+func (a *Adapter) Run() error {
 	a.logger.Info().Msg("starting")
 	defer a.logger.Info().Msg("stopping")
 
 	err := a.connect()
 	if err != nil {
 		a.logger.Error().Err(err).Msg("failed to connect to MQTT broker")
-		return
+		return err
 	}
 
 	defer a.client.Disconnect(uint(a.disconnectTimeout.Milliseconds()))
@@ -92,6 +92,8 @@ main_loop:
 			a.client.Publish(a.respTopic, 2, false, resp)
 		}
 	}
+
+	return nil
 }
 
 func (a *Adapter) Stop() {

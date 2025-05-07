@@ -65,7 +65,10 @@ func (app *App) Start() {
 	app.wg.Add(1)
 	go func() {
 		defer app.wg.Done()
-		app.mqttAdapter.Run()
+		err := app.mqttAdapter.Run()
+		if err != nil {
+			panic("mqtt adapter exited unexpectedly")
+		}
 	}()
 }
 
