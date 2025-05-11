@@ -76,15 +76,14 @@ main_loop:
 		case <-a.stopChan:
 			break main_loop
 		case <-a.announceChan:
+			a.logger.Debug().Msg("announce")
+
 			token := a.client.Publish(a.announceTopic, 2, false, a.shipId)
 			// TODO: maybe report net loss only after N consecutive failed announce attempts?
 			if token.WaitTimeout(a.announceTimeout) == false {
 				a.logger.Error().Msg("timeout expired while publishing announce message")
 				a.core.NetLoss()
-			}
-
-			err := token.Error()
-			if err != nil {
+			} else if err := token.Error(); err != nil {
 				a.logger.Error().Err(err).Msg("error publishing announce message")
 				a.core.NetLoss()
 			}
@@ -122,6 +121,7 @@ func (a *Adapter) connect() error {
 	opts.SetOnConnectHandler(func(cl mqtt.Client) {
 		// subscribe to request topic
 		cl.Subscribe(a.rqTopic, 2, func(cl mqtt.Client, msg mqtt.Message) {
+			a.logger.Debug().Msgf("received request: %s", string(msg.Payload()))
 			a.core.HandleRequest(msg.Payload())
 		})
 	})
