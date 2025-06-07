@@ -8,14 +8,16 @@ const (
 )
 
 const (
-	cmdQuery           = "query"
-	cmdNavStart        = "nav_start"
-	cmdNavStop         = "nav_stop"
-	cmdNetLoss         = "net_loss"
-	cmdSetWaypoints    = "set_waypoints"
-	cmdAddWaypoint     = "add_waypoint"
-	cmdClearWaypoints  = "clear_waypoints"
-	cmdSetHomeWaypoint = "set_home_waypoint"
+	cmdQuery            = "query"
+	cmdNavStart         = "nav_start"
+	cmdNavStop          = "nav_stop"
+	cmdNetLoss          = "net_loss"
+	cmdSetWaypoints     = "set_waypoints"
+	cmdAddWaypoint      = "add_waypoint"
+	cmdClearWaypoints   = "clear_waypoints"
+	cmdSetHomeWaypoint  = "set_home_waypoint"
+	cmdStartCalibration = "start_calibration"
+	cmdStopCalibration  = "stop_calibration"
 )
 
 type Request struct {

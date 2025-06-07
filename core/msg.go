@@ -6,18 +6,20 @@ const (
 )
 
 const (
-	CmdSpeedUp         = "speed_up"
-	CmdSpeedDown       = "speed_down"
-	CmdTurnLeft        = "turn_left"
-	CmdTurnRight       = "turn_right"
-	CmdSetSpeed        = "set_speed"
-	CmdSetSteering     = "set_steering"
-	CmdSetWaypoints    = "set_waypoints"
-	CmdAddWaypoint     = "add_waypoint"
-	CmdClearWaypoints  = "clear_waypoints"
-	CmdSetHomeWaypoint = "set_home_waypoint"
-	CmdNavStart        = "nav_start"
-	CmdNetLoss         = "net_loss"
+	CmdSpeedUp          = "speed_up"
+	CmdSpeedDown        = "speed_down"
+	CmdTurnLeft         = "turn_left"
+	CmdTurnRight        = "turn_right"
+	CmdSetSpeed         = "set_speed"
+	CmdSetSteering      = "set_steering"
+	CmdSetWaypoints     = "set_waypoints"
+	CmdAddWaypoint      = "add_waypoint"
+	CmdClearWaypoints   = "clear_waypoints"
+	CmdSetHomeWaypoint  = "set_home_waypoint"
+	CmdNavStart         = "nav_start"
+	CmdNetLoss          = "net_loss"
+	CmdStartCalibration = "start_calibration"
+	CmdStopCalibration  = "stop_calibration"
 )
 
 type Waypoint struct {

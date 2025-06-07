@@ -40,6 +40,12 @@ func (m *mockShipNav) ClearWaypoints() {
 func (m *mockShipNav) SetHomeWaypoint(*Waypoint) {
 }
 
+func (m *mockShipNav) StartCalibration() {
+}
+
+func (m *mockShipNav) StopCalibration() {
+}
+
 type mockMqttHandler struct {
 }
 

@@ -22,6 +22,8 @@ type ShipNav interface {
 	AddWaypoint(*Waypoint)
 	ClearWaypoints()
 	SetHomeWaypoint(*Waypoint)
+	StartCalibration()
+	StopCalibration()
 }
 
 type MqttHandler interface {
@@ -158,6 +160,10 @@ func (c *Core) handleCommand(rq *Request) {
 	} else if rq.Cmd == CmdNavStart {
 		c.shipNav.NavStart()
 		c.autoNav = true
+	} else if rq.Cmd == CmdStartCalibration {
+		c.shipNav.StartCalibration()
+	} else if rq.Cmd == CmdStopCalibration {
+		c.shipNav.StopCalibration()
 	} else {
 		c.logger.Error().Msgf("unknown command: %s", rq.Cmd)
 	}

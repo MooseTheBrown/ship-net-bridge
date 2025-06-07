@@ -111,6 +111,18 @@ func (a *Adapter) SetHomeWaypoint(waypoint *core.Waypoint) {
 	a.cmdChan <- c
 }
 
+func (a *Adapter) StartCalibration() {
+	a.cmdChan <- &cmd{
+		cmd: cmdStartCalibration,
+	}
+}
+
+func (a *Adapter) StopCalibration() {
+	a.cmdChan <- &cmd{
+		cmd: cmdStopCalibration,
+	}
+}
+
 func (a *Adapter) sendMessage(conn net.Conn, command *cmd) {
 	rq := &Request{}
 
