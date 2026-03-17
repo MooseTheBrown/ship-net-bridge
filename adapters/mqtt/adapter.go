@@ -104,7 +104,11 @@ func (a *Adapter) SendResponse(resp []byte) {
 }
 
 func (a *Adapter) Announce() {
-	a.announceChan <- true
+	select {
+	case a.announceChan <- true:
+	default:
+		a.logger.Error().Msg("announce channel is full, mqtt.Adapter.Announce() would block")
+	}
 }
 
 func (a *Adapter) connect() error {
